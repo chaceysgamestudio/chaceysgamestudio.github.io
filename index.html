@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChaceysGames Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{--accent-hue:30;--intensity:70} /* Changed hue to orange */
+
+body{
+ font-family:'Inter',sans-serif;
+ background:radial-gradient(circle at 20% 20%,hsl(var(--accent-hue),40%,calc(var(--intensity)*1%)),#0f0f14 60%);
+ color:#f5f5f5;
+ overflow-x:hidden;
+ transition:background .6s ease;
+}
+
+canvas{position:fixed;inset:0;z-index:-2}
+
+header{padding:6rem 2rem 4rem;text-align:center}
+header h1{
+ font-size:3.5rem;font-weight:900;letter-spacing:-2px;
+ background:linear-gradient(90deg,#fff,hsl(var(--accent-hue),90%,70%));
+ -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+header p{margin-top:1.2rem;font-size:1.2rem;opacity:.8}
+
+nav{display:flex;justify-content:center;gap:2.5rem;padding-bottom:3rem}
+nav a{text-decoration:none;color:#aaa;font-weight:600;position:relative;transition:.3s}
+nav a::after{content:"";position:absolute;width:0;height:2px;bottom:-6px;left:0;background:hsl(var(--accent-hue),90%,70%);transition:.3s}
+nav a:hover{color:#fff}
+nav a:hover::after{width:100%}
+
+section{padding:5rem 2rem;max-width:1100px;margin:auto}
+h2{font-size:2rem;margin-bottom:2rem}
+
+.card{
+ background:rgba(255,255,255,.04);
+ padding:2.5rem;border-radius:24px;
+ backdrop-filter:blur(12px);
+ border:1px solid rgba(255,255,255,.05);
+ transition:transform .2s ease, box-shadow .3s ease;
+ transform-style:preserve-3d;
+ will-change:transform;
+}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2.5rem}
+
+ul{list-style:none}
+ul li{margin-bottom:1rem;position:relative;padding-left:1.5rem}
+ul li::before{content:"▹";position:absolute;left:0;color:hsl(var(--accent-hue),90%,70%)}
+
+.button{
+ display:inline-block;
+ margin-top:1rem;
+ padding:.8rem 1.8rem;
+ border-radius:999px;
+ font-weight:800;
+ cursor:pointer;border:none;
+ background:linear-gradient(90deg,#fff,hsl(var(--accent-hue),90%,75%));
+ color:#000;
+ transition:transform .15s ease, box-shadow .2s ease;
+ position:relative;
+ overflow:hidden;
+}
+.button:active{transform:scale(.92)}
+.button:hover{transform:scale(1.08);box-shadow:0 15px 35px hsla(var(--accent-hue),90%,60%,.5)}
+.button::after{
+ content:"";position:absolute;inset:0;
+ background:radial-gradient(circle at center,rgba(255,255,255,.6),transparent 60%);
+ opacity:0;transition:.3s;
+}
+.button:hover::after{opacity:.2}
+
+.devlog-card{cursor:pointer;overflow:hidden}
+.devlog-content{max-height:0;overflow:hidden;transition:max-height .5s ease,opacity .3s;opacity:0}
+.devlog-card.active .devlog-content{max-height:300px;opacity:1;margin-top:1rem}
+
+.reveal{opacity:0;transform:translateY(40px);transition:.8s cubic-bezier(.2,.8,.2,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+footer{text-align:center;padding:4rem 1rem;opacity:.5;font-size:.9rem}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<header class="reveal">
+<h1>ChaceysGames Studio</h1>
+<p>We make game engines, tech demos and unique fun games.</p>
+</header>
+
+<nav class="reveal">
+<a href="#about">About</a>
+<a href="#tech">Technology</a>
+<a href="#devlog">Devlog</a>
+<a href="#principles">Principles</a>
+<a href="#contact">Contact</a>
+</nav>
+
+<section id="about" class="reveal">
+<div class="card"><h2>About</h2><p>ChaceysGames Studio is an independent development studio focused on building powerful systems, custom technology, and creative interactive experiences. The studio values experimentation, performance, and full control over the tools it uses — often developing its own engines and backend software to push ideas further.</p></div>
+</section>
+
+<section id="tech" class="reveal">
+<h2>Core Technology</h2>
+<div class="grid">
+<div class="card"><h3>Custom Engine</h3><p>Built for control.</p></div>
+<div class="card"><h3>Backend Systems</h3><p>Stable and scalable.</p></div>
+<div class="card"><h3>Optimization</h3><p>Measured and refined.</p></div>
+</div>
+</section>
+
+<section id="devlog" class="reveal">
+<h2>Development Log</h2>
+<div style="margin-bottom:2rem;display:flex;gap:1rem;flex-wrap:wrap;">
+<button class="button" onclick="filterPosts('all')">All</button>
+<button class="button" onclick="filterPosts('engine')">game tweaks</button>
+<button class="button" onclick="filterPosts('backend')">bugs in games</button>
+<button class="button" onclick="filterPosts('enginetweaks')">engine tweaks</button>
+<button class="button" onclick="filterPosts('optimization')">anouncements</button>
+</div>
+<div id="devlog-container" class="grid"></div>
+</section>
+
+<section id="principles" class="reveal">
+<div class="card">
+<h2>Studio Principles</h2>
+<ul>
+<li>Performance over bloat</li>
+<li>Systems over shortcuts</li>
+<li>Scalable design first</li>
+<li>Build tools, not hacks</li>
+</ul>
+</div>
+</section>
+
+<section id="contact" class="reveal">
+<div class="card" style="text-align:center;">
+<h2>Contact</h2>
+<a href="contact.html" class="button">Get in Touch</a>
+</div>
+</section>
+
+<footer>© 2026 ChaceysGames Studio</footer>
+
+<script>
+// ---------- SOUND (Subtle Click) ----------
+const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+function clickSound(){
+ const osc=audioCtx.createOscillator();
+ const gain=audioCtx.createGain();
+ osc.type='sine';
+ osc.frequency.value=180;
+ gain.gain.value=.05;
+ osc.connect(gain);gain.connect(audioCtx.destination);
+ osc.start();osc.stop(audioCtx.currentTime+.05);
+}
+document.addEventListener('click',e=>{
+ if(e.target.classList.contains('button')||e.target.classList.contains('card')) clickSound();
+});
+
+// ---------- MAGNETIC TILT WITH INERTIA + DYNAMIC SHADOW ----------
+const tiltState = new Map();
+
+function updateTilt(){
+ document.querySelectorAll('.card').forEach(card=>{
+  if(!tiltState.has(card)){
+   tiltState.set(card,{tx:0,ty:0,cx:0,cy:0});
+  }
+  const state = tiltState.get(card);
+
+  state.cx += (state.tx - state.cx) * 0.08;
+  state.cy += (state.ty - state.cy) * 0.08;
+
+  const shadowX = -state.cx * 4;
+  const shadowY = state.cy * 4;
+
+  card.style.transform = `rotateX(${state.cy}deg) rotateY(${state.cx}deg) scale(1.03)`;
+  card.style.boxShadow = `${shadowX}px ${shadowY+30}px 60px rgba(0,0,0,.6)`;
+ });
+ requestAnimationFrame(updateTilt);
+}
+updateTilt();
+
+document.addEventListener('mousemove',e=>{
+ document.querySelectorAll('.card').forEach(card=>{
+  const rect=card.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+  const state = tiltState.get(card);
+  if(!state) return;
+  if(x>0&&x<rect.width&&y>0&&y<rect.height){
+   state.tx=(x/rect.width-.5)*14;
+   state.ty=(y/rect.height-.5)*-14;
+  }else{
+   state.tx=0;
+   state.ty=0;
+  }
+ });
+});
+
+// ---------- SCROLL INTENSITY SHIFT ----------
+window.addEventListener('scroll',()=>{
+ const scroll=window.scrollY/(document.body.scrollHeight-window.innerHeight);
+ document.documentElement.style.setProperty('--intensity',60+scroll*20);
+});
+
+// ---------- PARTICLES WITH BURST ----------
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+canvas.width=innerWidth;canvas.height=innerHeight;
+addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight});
+
+let hue=30; /* Orange hue */
+setInterval(()=>{hue+=.1;document.documentElement.style.setProperty('--accent-hue',hue)},50);
+
+const particles=[];
+for(let i=0;i<80;i++){
+ particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,life:Infinity})
+}
+
+function burst(x,y){
+ for(let i=0;i<25;i++){
+  particles.push({
+   x,y,
+   vx:(Math.random()-.5)*4,
+   vy:(Math.random()-.5)*4,
+   life:60
+  });
+ }
+}
+
+function animate(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle=`hsla(${hue},90%,70%,.6)`;
+ particles.forEach((p,index)=>{
+  p.x+=p.vx;p.y+=p.vy;
+  if(p.life!==Infinity){
+   p.life--;
+   if(p.life<=0){particles.splice(index,1);return;}
+  }
+  if(p.x<0||p.x>canvas.width)p.vx*=-1;
+  if(p.y<0||p.y>canvas.height)p.vy*=-1;
+  ctx.beginPath();ctx.arc(p.x,p.y,2,0,Math.PI*2);ctx.fill();
+ });
+ requestAnimationFrame(animate);
+}
+animate();
+
+// ---------- DEVLOG ----------
+const posts=[
+ {title:"made website!",date:"March 2026",tag:"optimization",content:"WE MADE A WEBSITE!"},
+
+];
+
+const container=document.getElementById('devlog-container');
+function renderPosts(filter){
+ container.innerHTML='';
+ posts.filter(p=>filter==='all'||p.tag===filter)
+ .forEach((p,i)=>{
+  const card=document.createElement('div');
+  card.className='card devlog-card reveal';
+  card.style.opacity=0;card.style.transform='translateY(40px)';
+  card.innerHTML=`<h3>${p.title}</h3><p style="opacity:.6;margin:.5rem 0;">${p.date}</p><div class='devlog-content'><p>${p.content}</p></div>`;
+  card.onclick=()=>card.classList.toggle('active');
+  container.appendChild(card);
+  setTimeout(()=>{card.style.transition='all .6s cubic-bezier(.2,.8,.2,1)';card.style.opacity=1;card.style.transform='translateY(0)'},i*120);
+ });
+}
+function filterPosts(tag){
+ const rect = container.getBoundingClientRect();
+ burst(rect.left + rect.width/2, rect.top + rect.height/2);
+ renderPosts(tag);
+}
+renderPosts('all');
+
+// ---------- SCROLL REVEAL ----------
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})
+},{threshold:.2});
+document.querySelectorAll('.reveal').forEach(r=>observer.observe(r));
+
+// ---------- BASIC RUNTIME TESTS ----------
+console.assert(typeof filterPosts === 'function','filterPosts should exist');
+console.assert(typeof burst === 'function','burst should exist');
+console.assert(Array.isArray(posts),'posts should be an array');
+</script>
+
+</body>
+</html>
